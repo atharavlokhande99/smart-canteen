@@ -1,0 +1,89 @@
+{
+  "theme": "light",
+  "archetype": "Organic & Earthy",
+  "typography": {
+    "primary_font": "Manrope",
+    "secondary_font": "Figtree",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter font-black",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-extrabold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-bold",
+      "h4": "text-lg sm:text-xl font-semibold",
+      "body": "text-base leading-relaxed font-normal",
+      "small_label": "text-sm uppercase tracking-[0.2em] font-bold"
+    }
+  },
+  "colors": {
+    "background": "#F9F6F0",
+    "surface": "#FFFFFF",
+    "primary": "#D95D39",
+    "primary_hover": "#C84C2A",
+    "secondary": "#81B29A",
+    "text_main": "#264653",
+    "text_muted": "#5C7582",
+    "border": "#E5E0D8",
+    "error": "#E63946",
+    "success": "#2A9D8F"
+  },
+  "layout_and_spacing": {
+    "general": "Generous spacing philosophy, generous internal padding in bordered containers.",
+    "container_padding": "p-6 sm:p-8",
+    "bento_grid": "Base grid md:grid-cols-3 lg:grid-cols-4 with gap-6. Every pixel utilized.",
+    "border_radius": "rounded-2xl for major cards, rounded-xl for inner elements, rounded-full for badges."
+  },
+  "components": {
+    "cards": "Flat background (surface), 1px solid subtle border (border color), NO default shadow. On hover: shadow-lg, -translate-y-1.",
+    "buttons": "Primary button uses Terracotta. Hover must increase color depth and explicitly set text color to white. Use rounded-full or rounded-xl.",
+    "glassmorphism": "Used only for sticky headers. backdrop-blur-xl bg-white/70, 1px bottom border border-border/40, backdrop-saturate-150.",
+    "inputs": "Shadcn UI forms customized to remove standard 'Vercel' look. Use rounded-xl, subtle border, focus:ring-2 focus:ring-primary focus:border-transparent.",
+    "badges": "For time slots/statuses. Soft background (10% opacity of color) with bold text of the same hue."
+  },
+  "motion": {
+    "hover": "transition-all duration-300 ease-in-out",
+    "entrance": "Staggered fade-up for dashboard widgets and menu grids.",
+    "images": "Image hover effect: scale-105 transition-transform duration-500."
+  },
+  "icons": {
+    "library": "lucide-react",
+    "style": "Use uniform stroke width (1.5px or 2px). Ensure icons in buttons are visually balanced with text padding."
+  },
+  "media_urls": {
+    "hero_background": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/8296c33c-55b7-4bb3-a2d5-e8320264c968/images/1a01ab4c127168a5c91e8e28ac4f7c2e7a7d32f113e9a2e986518899a76ef622.png",
+      "description": "Abstract organic background for dashboard loading states or side panels"
+    },
+    "login_hero": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/8296c33c-55b7-4bb3-a2d5-e8320264c968/images/326c47e58e45964036646fd66cfe9ca783934788955c01f6b811b15e70174bbf.png",
+      "description": "Appetizing wide-angle university canteen image for login/onboarding screen"
+    },
+    "menu_items": [
+      {
+        "url": "https://images.unsplash.com/photo-1710352461687-de7450f07f2b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHw0fHxhcHBldGl6aW5nJTIwY2FmZSUyMGZvb2QlMjBwbGF0ZXxlbnwwfHx8fDE3NzU1NTMyNTB8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Cereal and other foods plate"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1773326631184-cece466f4e91?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwxfHxhcHBldGl6aW5nJTIwY2FmZSUyMGZvb2QlMjBwbGF0ZXxlbnwwfHx8fDE3NzU1NTMyNTB8MA&ixlib=rb-4.1.0&q=85",
+        "description": "French toast with syrup"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1771605344288-de680425b4ca?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwyfHxhcHBldGl6aW5nJTIwY2FmZSUyMGZvb2QlMjBwbGF0ZXxlbnwwfHx8fDE3NzU1NTMyNTB8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Croissant on white plate"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1768634003098-9d5848d3b93f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwzfHxhcHBldGl6aW5nJTIwY2FmZSUyMGZvb2QlMjBwbGF0ZXxlbnwwfHx8fDE3NzU1NTMyNTB8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Full english breakfast"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Strictly adhere to the color palette and typography. Do not use Inter or generic blue/gray scales.",
+    "Implement the bento grid (Mode B) for the Staff and Admin dashboards with tight gaps (gap-6) and utilized pixels.",
+    "Use pure HTML/Tailwind for creative layout wrappers, but use heavily customized Shadcn UI for forms, dialogs, and select menus.",
+    "Include data-testid on all interactive elements (buttons, inputs, menu items, tabs).",
+    "Ensure contrast passes APCA standards; text on primary buttons must be #FFFFFF.",
+    "Do not use card components everywhere; vary the container shapes. Example: use cardless rows for simple list items.",
+    "For the food menu, use a Masonry or Tetris-like grid to break monotony.",
+    "Use the provided image URLs for placeholders, do not use dummyimage or via.placeholder.com.",
+    "Since files are .js/.jsx, write Javascript for React components and strictly avoid .tsx types."
+  ]
+}
