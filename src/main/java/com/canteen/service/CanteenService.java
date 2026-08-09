@@ -9,6 +9,7 @@ import java.util.*;
 
 public class CanteenService {
     private final Map<String, User> users = new HashMap<>();
+    private final Map<String, String> userPasswords = new HashMap<>();
     private final Map<String, MenuItem> menu = new LinkedHashMap<>();
     private final Map<String, TimeSlot> timeSlots = new LinkedHashMap<>();
     private final Map<String, Order> orders = new HashMap<>();
@@ -19,6 +20,14 @@ public class CanteenService {
     }
 
     private void initSampleData() {
+        // Default Student User
+        User student = new User("U101", "Atharav Lokhande", "atharavlokhande99@gmail.com", "STUDENT");
+        registerUser(student, "password123");
+
+        // Default Staff User
+        User staff = new User("S101", "Canteen Staff", "staff@canteen.com", "STAFF");
+        registerUser(staff, "staff123");
+
         // 🍳 Breakfast / Morning
         menu.put("ITEM1", new MenuItem("ITEM1", "Poha", "Breakfast", 20.0, true, "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&q=80"));
         menu.put("ITEM2", new MenuItem("ITEM2", "Upma", "Breakfast", 20.0, true, "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&q=80"));
@@ -80,7 +89,25 @@ public class CanteenService {
     }
 
     public void registerUser(User user) {
+        registerUser(user, "password123");
+    }
+
+    public void registerUser(User user, String password) {
+        users.put(user.getEmail(), user);
         users.put(user.getUserId(), user);
+        userPasswords.put(user.getUserId(), password);
+        userPasswords.put(user.getEmail(), password);
+    }
+
+    public User authenticateUser(String emailOrId, String password) {
+        User user = users.get(emailOrId);
+        if (user != null) {
+            String storedPassword = userPasswords.get(emailOrId);
+            if (storedPassword != null && storedPassword.equals(password)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public List<MenuItem> getAvailableMenu() {

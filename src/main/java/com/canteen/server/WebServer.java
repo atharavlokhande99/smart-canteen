@@ -3,6 +3,7 @@ package com.canteen.server;
 import com.canteen.model.MenuItem;
 import com.canteen.model.Order;
 import com.canteen.model.TimeSlot;
+import com.canteen.model.User;
 import com.canteen.service.CanteenService;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -29,6 +30,8 @@ public class WebServer {
 
         // Web UI & API Endpoints
         server.createContext("/", new StaticFileHandler());
+        server.createContext("/api/auth/login", new LoginHandler());
+        server.createContext("/api/auth/register", new RegisterHandler());
         server.createContext("/api/menu", new MenuHandler());
         server.createContext("/api/slots", new SlotsHandler());
         server.createContext("/api/order", new OrderHandler());
@@ -58,6 +61,63 @@ public class WebServer {
             OutputStream os = exchange.getResponseBody();
             os.write(bytes);
             os.close();
+        }
+    }
+
+    // API: User Login
+    private class LoginHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+                InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+                Map<String, String> body = gson.fromJson(reader, Map.class);
+
+                String emailOrId = body.get("email");
+                String password = body.get("password");
+
+                User user = canteenService.authenticateUser(emailOrId, password);
+                if (user != null) {
+                    Map<String, Object> resp = new HashMap<>();
+                    resp.put("success", true);
+                    resp.put("user", user);
+                    sendJsonResponse(exchange, 200, gson.toJson(resp));
+                } else {
+                    Map<String, Object> err = new HashMap<>();
+                    err.put("success", false);
+                    err.put("message", "Invalid email/ID or password!");
+                    sendJsonResponse(exchange, 401, gson.toJson(err));
+                }
+            } else {
+                exchange.sendResponseHeaders(405, -1);
+            }
+        }
+    }
+
+    // API: User Registration
+    private class RegisterHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+                InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+                Map<String, String> body = gson.fromJson(reader, Map.class);
+
+                String name = body.get("name");
+                String email = body.get("email");
+                String password = body.get("password");
+                String role = body.get("role");
+
+                String userId = "U-" + UUID.randomUUID().toString().substring(0, 6);
+                User user = new User(userId, name, email, role != null ? role : "STUDENT");
+
+                canteenService.registerUser(user, password);
+
+                Map<String, Object> resp = new HashMap<>();
+                resp.put("success", true);
+                resp.put("user", user);
+                sendJsonResponse(exchange, 200, gson.toJson(resp));
+            } else {
+                exchange.sendResponseHeaders(405, -1);
+            }
         }
     }
 

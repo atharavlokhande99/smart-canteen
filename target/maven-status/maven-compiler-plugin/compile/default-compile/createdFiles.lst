@@ -1,4 +1,6 @@
+com\canteen\server\WebServer$LoginHandler.class
 com\canteen\App.class
+com\canteen\server\WebServer$RegisterHandler.class
 com\canteen\server\WebServer.class
 com\canteen\model\Order.class
 com\canteen\model\TimeSlot.class
