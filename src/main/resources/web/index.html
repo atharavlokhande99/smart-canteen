@@ -49,7 +49,7 @@
                 <div id="login-error" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl"></div>
 
                 <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200">
-                    Sign In to Order Food <i class="fa-solid fa-arrow-right ml-1"></i>
+                    Sign In to Portal <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
 
                 <p class="text-xs text-center text-slate-400 pt-2">
@@ -93,32 +93,25 @@
         </div>
     </div>
 
-    <!-- 2. MAIN APP PORTAL -->
-    <div id="main-app" class="hidden">
+    <!-- 2. MAIN APP CONTAINER -->
+    <div id="main-app" class="hidden min-h-screen flex flex-col">
         <!-- Header -->
         <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40 px-6 py-4">
-            <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                <div class="flex items-center space-x-3">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="showChoiceScreen()">
                     <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-500/30">
                         <i class="fa-solid fa-utensils"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Smart Canteen Web Portal</h1>
-                        <p class="text-xs text-slate-400">Campus Pre-Ordering & OTP Pickup System (Java Backend)</p>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Smart Canteen Portal</h1>
+                        <p class="text-xs text-slate-400">Campus Pre-Ordering & OTP Pickup System</p>
                     </div>
                 </div>
 
-                <!-- ROLE / ACTION SELECTOR BAR -->
-                <div class="flex items-center bg-slate-950 p-1 rounded-2xl border border-slate-800 self-start md:self-auto">
-                    <button onclick="switchViewMode('ORDER')" id="mode-btn-ORDER" class="view-mode-btn px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-md transition flex items-center gap-2">
-                        <i class="fa-solid fa-burger"></i> I Want to Order Food
-                    </button>
-                    <button onclick="switchViewMode('PICKUP')" id="mode-btn-PICKUP" class="view-mode-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition flex items-center gap-2">
-                        <i class="fa-solid fa-hand-holding-hand"></i> I Came to Pick Up (Staff Counter)
-                    </button>
-                </div>
-
                 <div class="flex items-center space-x-4">
+                    <button onclick="showChoiceScreen()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-2 rounded-xl transition flex items-center gap-1">
+                        <i class="fa-solid fa-house"></i> Home
+                    </button>
                     <div class="flex items-center space-x-3 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700">
                         <i class="fa-solid fa-user-circle text-indigo-400 text-lg"></i>
                         <span id="user-display-name" class="text-sm font-medium">User</span>
@@ -131,18 +124,65 @@
             </div>
         </header>
 
-        <!-- VIEW MODE 1: STUDENT FOOD ORDERING PORTAL -->
-        <main id="view-order-portal" class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- 2A. POST-LOGIN CHOICE SCREEN (Displayed immediately after Login) -->
+        <main id="choice-screen" class="max-w-4xl mx-auto px-6 py-16 flex-1 flex flex-col justify-center items-center text-center space-y-10 animate-in fade-in duration-300">
+            <div class="space-y-3">
+                <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+                    WELCOME BACK, <span id="welcome-user-name">ATHARAV</span> 👋
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">What would you like to do today?</h2>
+                <p class="text-slate-400 text-sm max-w-md mx-auto">Select whether you want to order fresh food online or pick up your prepared meal at the canteen counter.</p>
+            </div>
+
+            <!-- 2 Giant Action Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+                
+                <!-- CARD 1: ORDER FOOD -->
+                <button onclick="openOrderingPortal()" class="group bg-slate-900 border-2 border-slate-800 hover:border-indigo-500 rounded-3xl p-8 text-left transition duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 space-y-4 relative overflow-hidden flex flex-col justify-between">
+                    <div class="w-16 h-16 rounded-2xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-burger"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white group-hover:text-indigo-400 transition">I Want to Order Food</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Browse 43 fresh menu items, select pickup time slots, pay online & get your OTP.</p>
+                    </div>
+                    <div class="text-xs font-bold text-indigo-400 flex items-center gap-1 pt-2">
+                        Browse Menu & Order <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+                    </div>
+                </button>
+
+                <!-- CARD 2: PICK UP FOOD -->
+                <button onclick="openPickupPortal()" class="group bg-slate-900 border-2 border-slate-800 hover:border-emerald-500 rounded-3xl p-8 text-left transition duration-300 hover:shadow-2xl hover:shadow-emerald-500/10 space-y-4 relative overflow-hidden flex flex-col justify-between">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition duration-300">
+                        <i class="fa-solid fa-hand-holding-hand"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition">I Came for Pick Up</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Present your 4-digit OTP at the canteen counter to verify and collect your food.</p>
+                    </div>
+                    <div class="text-xs font-bold text-emerald-400 flex items-center gap-1 pt-2">
+                        Verify OTP & Collect Food <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+                    </div>
+                </button>
+
+            </div>
+        </main>
+
+        <!-- 2B. FOOD ORDERING PORTAL VIEW -->
+        <main id="view-order-portal" class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 hidden">
 
             <!-- Left Column: Menu & Category Tabs -->
             <section class="lg:col-span-2 space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4">
                     <div>
                         <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-burger text-amber-400"></i> Today's Canteen Menu
+                            <i class="fa-solid fa-burger text-amber-400"></i> Canteen Food Menu
                         </h2>
-                        <p class="text-sm text-slate-400">43 Freshly Prepared Items • Select items to add to cart</p>
+                        <p class="text-sm text-slate-400">43 Freshly Prepared Items • Click + Add to choose your meal</p>
                     </div>
+                    <button onclick="showChoiceScreen()" class="text-xs bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-slate-400 hover:text-white transition">
+                        <i class="fa-solid fa-arrow-left"></i> Change Action
+                    </button>
                 </div>
 
                 <!-- Category Filter Tabs -->
@@ -163,7 +203,6 @@
 
             <!-- Right Column: Cart & Slot Checkout -->
             <section class="space-y-6">
-                
                 <!-- Cart Box -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
                     <h3 class="text-lg font-bold text-white flex items-center justify-between border-b border-slate-800 pb-3">
@@ -197,24 +236,29 @@
                         <i class="fa-solid fa-credit-card"></i> Proceed to Pay & Get OTP
                     </button>
                 </div>
-
             </section>
 
         </main>
 
-        <!-- VIEW MODE 2: CANTEEN PICKUP COUNTER & OTP VERIFICATION (STAFF / PICKUP VIEW) -->
-        <main id="view-pickup-portal" class="max-w-4xl mx-auto px-6 py-12 space-y-8 hidden">
+        <!-- 2C. PICKUP FOOD & OTP VERIFICATION VIEW -->
+        <main id="view-pickup-portal" class="max-w-2xl mx-auto px-6 py-12 space-y-8 hidden">
             
-            <div class="text-center space-y-2">
-                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto text-3xl border border-emerald-500/30">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <h2 class="text-3xl font-extrabold text-white">Canteen Counter OTP Verification</h2>
-                <p class="text-sm text-slate-400">Have you come to pick up your food? Present your 4-Digit OTP to the staff below.</p>
+            <div class="flex justify-between items-center">
+                <button onclick="showChoiceScreen()" class="text-xs bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Action Choice
+                </button>
             </div>
 
-            <!-- OTP Verification Card -->
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6 max-w-lg mx-auto">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto text-3xl border border-emerald-500/30">
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-white">Food Pickup Counter Verification</h2>
+                <p class="text-sm text-slate-400">Enter your Order ID and 4-Digit Pickup OTP to collect your food!</p>
+            </div>
+
+            <!-- OTP Verification Form Box -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
                 <div class="space-y-4">
                     <div class="space-y-1">
                         <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">1. Order ID</label>
@@ -222,16 +266,17 @@
                     </div>
 
                     <div class="space-y-1">
-                        <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">2. 4-Digit Pickup OTP</label>
+                        <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">2. Enter 4-Digit Pickup OTP</label>
                         <input type="text" id="verify-otp-input" maxlength="4" placeholder="••••" class="w-full bg-slate-950 border-2 border-emerald-500/50 rounded-2xl px-4 py-4 text-center text-3xl font-extrabold font-mono text-emerald-400 tracking-widest focus:outline-none focus:border-emerald-400">
                     </div>
 
                     <button onclick="verifyOtpStaff()" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-600/30 transition duration-200 text-base flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-check-double text-lg"></i> VERIFY OTP & DELIVER FOOD
+                        <i class="fa-solid fa-circle-check text-lg"></i> VERIFY OTP & COLLECT FOOD
                     </button>
                 </div>
 
-                <div id="verify-result" class="hidden text-sm p-4 rounded-2xl text-center"></div>
+                <!-- VERIFICATION RESULT DISPLAY (SUCCESS OR WRONG OTP ERROR) -->
+                <div id="verify-result" class="hidden transition-all duration-300"></div>
             </div>
 
         </main>
@@ -334,22 +379,22 @@
         let currentOrder = null;
         let selectedPaymentMethod = 'UPI';
 
-        function switchViewMode(mode) {
-            document.querySelectorAll('.view-mode-btn').forEach(btn => {
-                btn.className = "view-mode-btn px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition flex items-center gap-2";
-            });
-            const activeBtn = document.getElementById(`mode-btn-${mode}`);
-            if (activeBtn) {
-                activeBtn.className = "view-mode-btn px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-md transition flex items-center gap-2";
-            }
+        function showChoiceScreen() {
+            document.getElementById('choice-screen').classList.remove('hidden');
+            document.getElementById('view-order-portal').classList.add('hidden');
+            document.getElementById('view-pickup-portal').classList.add('hidden');
+        }
 
-            if (mode === 'ORDER') {
-                document.getElementById('view-order-portal').classList.remove('hidden');
-                document.getElementById('view-pickup-portal').classList.add('hidden');
-            } else {
-                document.getElementById('view-order-portal').classList.add('hidden');
-                document.getElementById('view-pickup-portal').classList.remove('hidden');
-            }
+        function openOrderingPortal() {
+            document.getElementById('choice-screen').classList.add('hidden');
+            document.getElementById('view-order-portal').classList.remove('hidden');
+            document.getElementById('view-pickup-portal').classList.add('hidden');
+        }
+
+        function openPickupPortal() {
+            document.getElementById('choice-screen').classList.add('hidden');
+            document.getElementById('view-order-portal').classList.add('hidden');
+            document.getElementById('view-pickup-portal').classList.remove('hidden');
         }
 
         function toggleAuthMode(mode) {
@@ -420,7 +465,10 @@
 
             document.getElementById('user-display-name').innerText = currentUser.name;
             document.getElementById('user-display-role').innerText = currentUser.role;
+            document.getElementById('welcome-user-name').innerText = currentUser.name.toUpperCase();
 
+            // Display 2-Choice Decision Screen first!
+            showChoiceScreen();
             loadApp();
         }
 
@@ -679,10 +727,16 @@
             document.getElementById('otp-modal').classList.remove('flex');
         }
 
+        // VERIFY OTP AT CANTEEN COUNTER (CORRECT VS WRONG OTP DISPLAY)
         async function verifyOtpStaff() {
             const orderId = document.getElementById('verify-order-id').value;
             const otp = document.getElementById('verify-otp-input').value;
             const resultBox = document.getElementById('verify-result');
+
+            if (!orderId || !otp) {
+                alert("Please enter both Order ID and 4-Digit OTP!");
+                return;
+            }
 
             try {
                 const res = await fetch('/api/verify-otp', {
@@ -692,13 +746,32 @@
                 });
                 const data = await res.json();
 
-                resultBox.classList.remove('hidden', 'bg-emerald-500/20', 'text-emerald-300', 'border-emerald-500/30', 'bg-rose-500/20', 'text-rose-300', 'border-rose-500/30');
+                resultBox.classList.remove('hidden');
+                
                 if (data.success) {
-                    resultBox.className = "text-sm p-4 rounded-2xl border bg-emerald-500/20 text-emerald-300 border-emerald-500/30 flex items-center justify-center gap-2 font-bold";
-                    resultBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> ${data.message}`;
+                    // CORRECT OTP SUCCESS CELEBRATION
+                    resultBox.className = "p-6 rounded-2xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-center space-y-3 animate-in zoom-in duration-200";
+                    resultBox.innerHTML = `
+                        <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-emerald-400">Thank You! OTP Verified Successfully 🎉</h3>
+                            <p class="text-sm text-slate-200 mt-1 font-medium">Your food is ready! Please collect your meal at the counter and enjoy your food! 🍽️</p>
+                        </div>
+                    `;
                 } else {
-                    resultBox.className = "text-sm p-4 rounded-2xl border bg-rose-500/20 text-rose-300 border-rose-500/30 flex items-center justify-center gap-2 font-bold";
-                    resultBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg"></i> ${data.message}`;
+                    // WRONG OTP RED ERROR ALERT
+                    resultBox.className = "p-6 rounded-2xl border bg-rose-500/10 border-rose-500/30 text-rose-300 text-center space-y-3 animate-in shake duration-200";
+                    resultBox.innerHTML = `
+                        <div class="w-14 h-14 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mx-auto text-3xl">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-rose-400">❌ INVALID OTP PROVIDED!</h3>
+                            <p class="text-sm text-slate-200 mt-1 font-medium">You entered a wrong OTP. Please check your order receipt and enter the correct 4-digit OTP.</p>
+                        </div>
+                    `;
                 }
             } catch (err) {
                 alert("Verification error: " + err);
