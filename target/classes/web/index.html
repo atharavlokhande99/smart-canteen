@@ -9,87 +9,178 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
         body { font-family: 'Outfit', sans-serif; }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .animate-float-1 { animation: floatSlow 6s ease-in-out infinite; }
+        .animate-float-2 { animation: floatSlow 8s ease-in-out infinite 1s; }
+        .animate-float-3 { animation: floatSlow 7s ease-in-out infinite 2s; }
+        .animate-glow { animation: pulseGlow 5s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-indigo-500 selection:text-white">
 
-    <!-- 1. LOGIN / REGISTRATION MODAL OVERLAY -->
-    <div id="login-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-xl z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
-            <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+    <!-- 1. STUNNING WORLD-CLASS LOGIN / REGISTRATION HERO PAGE -->
+    <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-slate-950">
+        
+        <!-- Ambient Glowing Background Spheres -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl animate-glow pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-glow pointer-events-none" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 right-1/3 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl animate-glow pointer-events-none" style="animation-delay: 3.5s;"></div>
 
-            <div class="text-center space-y-2">
-                <div class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-indigo-500/30">
-                    <i class="fa-solid fa-utensils"></i>
+        <!-- Floating Food Badges -->
+        <div class="hidden lg:block absolute top-12 left-16 text-4xl animate-float-1 pointer-events-none opacity-80 filter drop-shadow-lg">🍕</div>
+        <div class="hidden lg:block absolute bottom-20 left-24 text-4xl animate-float-2 pointer-events-none opacity-80 filter drop-shadow-lg">☕</div>
+        <div class="hidden lg:block absolute top-20 right-24 text-4xl animate-float-3 pointer-events-none opacity-80 filter drop-shadow-lg">🍔</div>
+        <div class="hidden lg:block absolute bottom-16 right-32 text-4xl animate-float-1 pointer-events-none opacity-80 filter drop-shadow-lg">🍛</div>
+
+        <!-- Glassmorphism Container Card -->
+        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 rounded-3xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-2xl shadow-2xl overflow-hidden z-10 relative">
+            
+            <!-- LEFT PANEL: Hero Value Proposition -->
+            <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800/80 bg-gradient-to-br from-slate-900/90 via-slate-900/50 to-indigo-950/40 relative">
+                
+                <div class="space-y-6">
+                    <!-- Brand Pill -->
+                    <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/30 px-3.5 py-1.5 rounded-full">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Smart Campus Dining System</span>
+                    </div>
+
+                    <!-- Main Headline -->
+                    <div class="space-y-3">
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+                            Skip the Queue. <br>
+                            <span class="bg-gradient-to-r from-indigo-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">Pre-Order Canteen Meals in Seconds.</span>
+                        </h1>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Order 43 fresh food items online, select your pickup time slot, and collect your hot meal at the counter using secure 4-digit OTP verification!
+                        </p>
+                    </div>
+
+                    <!-- Feature Highlights -->
+                    <div class="space-y-3.5 pt-2">
+                        <div class="flex items-center space-x-3 text-xs sm:text-sm text-slate-300">
+                            <div class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold border border-indigo-500/30">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <span><strong>Zero Waiting Time</strong> — Book 15-minute pickup slots</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-xs sm:text-sm text-slate-300">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/30">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <span><strong>Secure OTP Verification</strong> — Counter verification safeguards your food</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-xs sm:text-sm text-slate-300">
+                            <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold border border-cyan-500/30">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </div>
+                            <span><strong>Instant Digital Payment</strong> — UPI, Cards & Cash at counter</span>
+                        </div>
+                    </div>
                 </div>
-                <h2 class="text-2xl font-extrabold text-white">Smart Canteen Portal</h2>
-                <p class="text-xs text-slate-400">Sign in with your Campus Student ID or Email</p>
+
+                <!-- Footer Tag -->
+                <div class="pt-8 text-xs text-slate-500 flex items-center space-x-2">
+                    <i class="fa-solid fa-code text-indigo-400"></i>
+                    <span>Powered by <strong>Java 21 REST Backend Engine</strong></span>
+                </div>
             </div>
 
-            <!-- LOGIN FORM -->
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Email or Student ID</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-envelope absolute left-3.5 top-3 text-slate-500 text-sm"></i>
-                        <input type="text" id="login-email" value="atharavlokhande99@gmail.com" required placeholder="name@college.edu or U101" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            <!-- RIGHT PANEL: Interactive Sign-In / Register Form -->
+            <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-center space-y-6 bg-slate-900/40">
+                
+                <!-- Toggle Tabs -->
+                <div class="flex bg-slate-950 p-1 rounded-2xl border border-slate-800">
+                    <button onclick="toggleAuthMode('login')" id="auth-tab-login" class="flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 transition duration-200 shadow-md">
+                        <i class="fa-solid fa-right-to-bracket mr-1"></i> Sign In
+                    </button>
+                    <button onclick="toggleAuthMode('register')" id="auth-tab-register" class="flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition duration-200">
+                        <i class="fa-solid fa-user-plus mr-1"></i> Register Account
+                    </button>
+                </div>
+
+                <!-- LOGIN FORM -->
+                <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300">Email or Student ID</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-slate-500 text-sm"></i>
+                            <input type="text" id="login-email" value="atharavlokhande99@gmail.com" required placeholder="atharavlokhande99@gmail.com or U101" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                        </div>
                     </div>
-                </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Password</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-lock absolute left-3.5 top-3 text-slate-500 text-sm"></i>
-                        <input type="password" id="login-password" value="password123" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300">Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-500 text-sm"></i>
+                            <input type="password" id="login-password" value="password123" required placeholder="••••••••" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+                        </div>
                     </div>
-                </div>
 
-                <div id="login-error" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl"></div>
+                    <div id="login-error" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl"></div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200">
-                    Sign In to Portal <i class="fa-solid fa-arrow-right ml-1"></i>
-                </button>
+                    <!-- Sign In Button -->
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 text-sm flex items-center justify-center gap-2 cursor-pointer">
+                        <span>Sign In to Canteen Portal</span> <i class="fa-solid fa-arrow-right"></i>
+                    </button>
 
-                <p class="text-xs text-center text-slate-400 pt-2">
-                    Don't have an account? <a href="#" onclick="toggleAuthMode('register')" class="text-indigo-400 hover:underline font-semibold">Create Account</a>
-                </p>
-            </form>
+                    <!-- Quick Demo Credentials Box -->
+                    <div class="pt-2 text-center">
+                        <span class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold block mb-2">Instant Demo Sign-In:</span>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="fillDemo('student')" class="flex-1 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 py-2 rounded-xl text-xs font-semibold transition">
+                                🎓 Atharav (Student)
+                            </button>
+                            <button type="button" onclick="fillDemo('staff')" class="flex-1 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 py-2 rounded-xl text-xs font-semibold transition">
+                                👨‍🍳 Canteen Staff
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
-            <!-- REGISTER FORM -->
-            <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Full Name</label>
-                    <input type="text" id="reg-name" required placeholder="e.g. Atharav Lokhande" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                </div>
+                <!-- REGISTER FORM -->
+                <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300">Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="e.g. Atharav Lokhande" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Email Address</label>
-                    <input type="email" id="reg-email" required placeholder="student@college.edu" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300">Email Address</label>
+                        <input type="email" id="reg-email" required placeholder="student@college.edu" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">Password</label>
-                    <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300">Password</label>
+                        <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-300">User Role</label>
-                    <select id="reg-role" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <option value="STUDENT">Student</option>
-                        <option value="STAFF">Canteen Staff</option>
-                    </select>
-                </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-300">User Role</label>
+                        <select id="reg-role" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                            <option value="STUDENT">Student</option>
+                            <option value="STAFF">Canteen Staff</option>
+                        </select>
+                    </div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg transition duration-200">
-                    Register Account
-                </button>
+                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition duration-200 text-sm">
+                        Create Account & Enter
+                    </button>
+                </form>
 
-                <p class="text-xs text-center text-slate-400 pt-2">
-                    Already registered? <a href="#" onclick="toggleAuthMode('login')" class="text-indigo-400 hover:underline font-semibold">Sign In</a>
-                </p>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -398,12 +489,31 @@
         }
 
         function toggleAuthMode(mode) {
+            const loginForm = document.getElementById('login-form');
+            const regForm = document.getElementById('register-form');
+            const tabLogin = document.getElementById('auth-tab-login');
+            const tabReg = document.getElementById('auth-tab-register');
+
             if (mode === 'register') {
-                document.getElementById('login-form').classList.add('hidden');
-                document.getElementById('register-form').classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                regForm.classList.remove('hidden');
+                tabReg.className = "flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 transition duration-200 shadow-md";
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition duration-200";
             } else {
-                document.getElementById('register-form').classList.add('hidden');
-                document.getElementById('login-form').classList.remove('hidden');
+                regForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 transition duration-200 shadow-md";
+                tabReg.className = "flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition duration-200";
+            }
+        }
+
+        function fillDemo(type) {
+            if (type === 'student') {
+                document.getElementById('login-email').value = "atharavlokhande99@gmail.com";
+                document.getElementById('login-password').value = "password123";
+            } else {
+                document.getElementById('login-email').value = "staff@canteen.com";
+                document.getElementById('login-password').value = "staff123";
             }
         }
 
@@ -727,7 +837,6 @@
             showChoiceScreen();
         }
 
-        // VERIFY OTP AT CANTEEN COUNTER WITH PERSONALIZED FOOD ITEM ENJOYMENT REMARK
         async function verifyOtpStaff() {
             const orderId = document.getElementById('verify-order-id').value;
             const otp = document.getElementById('verify-otp-input').value;
@@ -749,7 +858,6 @@
                 resultBox.classList.remove('hidden');
                 
                 if (data.success) {
-                    // PERSONALIZED ITEM ENJOYMENT MESSAGE (e.g. Upma, Veg Thali)
                     const foodNameText = data.foodNames || "food";
                     resultBox.className = "p-6 rounded-2xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-center space-y-3 animate-in zoom-in duration-200";
                     resultBox.innerHTML = `
@@ -762,7 +870,6 @@
                         </div>
                     `;
                 } else {
-                    // WRONG OTP RED REMARK
                     resultBox.className = "p-6 rounded-2xl border bg-rose-500/10 border-rose-500/30 text-rose-300 text-center space-y-3 animate-in shake duration-200";
                     resultBox.innerHTML = `
                         <div class="w-14 h-14 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mx-auto text-3xl">
