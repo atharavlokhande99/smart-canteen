@@ -45,7 +45,7 @@
                     <h2 class="text-2xl font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-burger text-amber-400"></i> Today's Canteen Menu
                     </h2>
-                    <p class="text-sm text-slate-400">43 Freshly Prepared Items with Photos • Select items to add to cart</p>
+                    <p class="text-sm text-slate-400">43 Freshly Prepared Items • Click + Add to choose your meal</p>
                 </div>
             </div>
 
@@ -72,12 +72,12 @@
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
                 <h3 class="text-lg font-bold text-white flex items-center justify-between border-b border-slate-800 pb-3">
                     <span><i class="fa-solid fa-cart-shopping text-indigo-400 mr-2"></i> Your Order Cart</span>
-                    <span id="cart-count" class="bg-indigo-600 text-white text-xs px-2.5 py-0.5 rounded-full">0 items</span>
+                    <span id="cart-count" class="bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">0 items</span>
                 </h3>
 
-                <!-- Cart Items List -->
-                <div id="cart-items" class="space-y-3 max-h-56 overflow-y-auto pr-1">
-                    <p class="text-sm text-slate-500 text-center py-6">Your cart is empty. Click "+ Add" on menu items!</p>
+                <!-- Cart Items Container -->
+                <div id="cart-items" class="space-y-3 max-h-64 overflow-y-auto pr-1">
+                    <!-- Populated dynamically or empty state -->
                 </div>
 
                 <!-- Pickup Time Slot Picker -->
@@ -92,7 +92,7 @@
 
                 <!-- Price Total -->
                 <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
-                    <span class="text-slate-400">Total Amount:</span>
+                    <span class="text-slate-400 text-sm">Total Amount:</span>
                     <span id="cart-total" class="text-2xl font-bold text-emerald-400">₹0.00</span>
                 </div>
 
@@ -171,6 +171,7 @@
                 slotsData = await slotsRes.json();
                 renderMenu();
                 renderSlots();
+                updateCartUI();
             } catch (err) {
                 console.error("Failed to load backend API:", err);
             }
@@ -257,7 +258,17 @@
             let totalCount = 0;
 
             if (itemKeys.length === 0) {
-                cartItemsContainer.innerHTML = '<p class="text-sm text-slate-500 text-center py-6">Your cart is empty.</p>';
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-8 space-y-3 bg-slate-950/60 rounded-2xl border border-dashed border-slate-800 p-4">
+                        <div class="w-14 h-14 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mx-auto text-2xl border border-indigo-500/20">
+                            <i class="fa-solid fa-plate-wheat"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-semibold text-slate-200">Your plate is empty right now! 🍽️</h4>
+                            <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1">Please add your favorite food items from the menu above to get started!</p>
+                        </div>
+                    </div>
+                `;
             } else {
                 cartItemsContainer.innerHTML = itemKeys.map(id => {
                     const item = menuData.find(m => m.itemId === id);
@@ -266,15 +277,18 @@
                     total += subtotal;
                     totalCount += cart[id];
                     return `
-                        <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-                            <div>
-                                <span class="text-sm font-medium text-slate-200 block">${item.name}</span>
-                                <span class="text-xs text-slate-500">₹${item.price} × ${cart[id]}</span>
+                        <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
+                            <div class="flex items-center space-x-3">
+                                <img src="${item.imageUrl}" class="w-10 h-10 rounded-lg object-cover border border-slate-800" onerror="this.src='https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&q=80'">
+                                <div>
+                                    <span class="text-sm font-semibold text-slate-200 block">${item.name}</span>
+                                    <span class="text-xs text-slate-400">₹${item.price.toFixed(0)} × ${cart[id]} = <span class="text-emerald-400 font-bold">₹${subtotal.toFixed(0)}</span></span>
+                                </div>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button onclick="removeFromCart('${id}')" class="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 text-xs">-</button>
-                                <span class="text-sm font-semibold">${cart[id]}</span>
-                                <button onclick="addToCart('${id}')" class="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 text-xs">+</button>
+                                <button onclick="removeFromCart('${id}')" class="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold text-xs">-</button>
+                                <span class="text-sm font-semibold w-4 text-center">${cart[id]}</span>
+                                <button onclick="addToCart('${id}')" class="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center font-bold text-xs">+</button>
                             </div>
                         </div>
                     `;
