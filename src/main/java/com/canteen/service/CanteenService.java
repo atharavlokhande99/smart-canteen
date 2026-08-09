@@ -12,20 +12,18 @@ public class CanteenService {
     private final Map<String, MenuItem> menu = new HashMap<>();
     private final Map<String, TimeSlot> timeSlots = new HashMap<>();
     private final Map<String, Order> orders = new HashMap<>();
+    private final Random random = new Random();
 
     public CanteenService() {
-        // Initialize default canteen data
         initSampleData();
     }
 
     private void initSampleData() {
-        // Add sample menu items
         menu.put("ITEM1", new MenuItem("ITEM1", "Veg Thali", "Lunch", 120.0, true));
         menu.put("ITEM2", new MenuItem("ITEM2", "Paneer Wrap", "Snacks", 80.0, true));
         menu.put("ITEM3", new MenuItem("ITEM3", "Cold Coffee", "Beverages", 50.0, true));
         menu.put("ITEM4", new MenuItem("ITEM4", "Samosa (2 pcs)", "Snacks", 30.0, true));
 
-        // Add sample time slots
         timeSlots.put("SLOT1", new TimeSlot("SLOT1", "12:00 PM", "12:30 PM", 10));
         timeSlots.put("SLOT2", new TimeSlot("SLOT2", "12:30 PM", "01:00 PM", 10));
         timeSlots.put("SLOT3", new TimeSlot("SLOT3", "01:00 PM", "01:30 PM", 10));
@@ -72,8 +70,11 @@ public class CanteenService {
 
         slot.bookSlot();
 
+        // Generate 4-digit random Pickup OTP (e.g. "4829")
+        String pickupOtp = String.format("%04d", random.nextInt(10000));
         String orderId = "ORD-" + UUID.randomUUID().toString().substring(0, 8);
-        Order newOrder = new Order(orderId, userId, orderItems, total, slotId);
+
+        Order newOrder = new Order(orderId, userId, orderItems, total, slotId, pickupOtp);
         orders.put(orderId, newOrder);
 
         return newOrder;
@@ -85,6 +86,28 @@ public class CanteenService {
             order.setStatus(newStatus);
         }
         return order;
+    }
+
+    /**
+     * Verifies the Pickup OTP presented by the student at the counter.
+     * If valid, updates order status to COMPLETED.
+     */
+    public boolean verifyPickupOtp(String orderId, String inputOtp) {
+        Order order = orders.get(orderId);
+        if (order == null) {
+            System.out.println("❌ Order Error: Order ID " + orderId + " not found!");
+            return false;
+        }
+
+        if (order.getPickupOtp().equals(inputOtp)) {
+            order.setOtpVerified(true);
+            order.setStatus("COMPLETED");
+            System.out.println("✅ OTP Verified Successfully! Food Order Handed Over to Student.");
+            return true;
+        } else {
+            System.out.println("❌ OTP Verification Failed! Invalid OTP provided for Order " + orderId);
+            return false;
+        }
     }
 
     public List<Order> getUserOrders(String userId) {

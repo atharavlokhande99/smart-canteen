@@ -9,14 +9,18 @@ public class Order {
     private double totalAmount;
     private String slotId;
     private String status; // "PENDING", "PREPARING", "READY", "COMPLETED", "CANCELLED"
+    private String pickupOtp;
+    private boolean isOtpVerified;
 
-    public Order(String orderId, String userId, List<MenuItem> items, double totalAmount, String slotId) {
+    public Order(String orderId, String userId, List<MenuItem> items, double totalAmount, String slotId, String pickupOtp) {
         this.orderId = orderId;
         this.userId = userId;
         this.items = items;
         this.totalAmount = totalAmount;
         this.slotId = slotId;
         this.status = "PENDING";
+        this.pickupOtp = pickupOtp;
+        this.isOtpVerified = false;
     }
 
     public String getOrderId() { return orderId; }
@@ -28,6 +32,10 @@ public class Order {
 
     public void setStatus(String status) { this.status = status; }
 
+    public String getPickupOtp() { return pickupOtp; }
+    public boolean isOtpVerified() { return isOtpVerified; }
+    public void setOtpVerified(boolean otpVerified) { isOtpVerified = otpVerified; }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -36,6 +44,8 @@ public class Order {
                 ", totalAmount=" + totalAmount +
                 ", slotId='" + slotId + '\'' +
                 ", status='" + status + '\'' +
+                ", pickupOtp='" + pickupOtp + '\'' +
+                ", isOtpVerified=" + isOtpVerified +
                 '}';
     }
 }

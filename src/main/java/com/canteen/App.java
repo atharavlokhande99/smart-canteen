@@ -36,23 +36,40 @@ public class App {
             System.out.println(" • " + slot);
         }
 
-        // 4. Place an Order
-        System.out.println("\n--- Placing Order ---");
+        // 4. Place an Order & Receive Pickup OTP
+        System.out.println("\n--- 🛒 Placing Order ---");
         List<String> selectedItems = Arrays.asList("ITEM1", "ITEM3"); // Veg Thali + Cold Coffee
         Order order = canteenService.placeOrder(student.getUserId(), selectedItems, "SLOT1");
         System.out.println("Order Placed Successfully!");
         System.out.println("Order Details: " + order);
+        System.out.println("🔑 STUDENT PICKUP OTP GENERATED: [" + order.getPickupOtp() + "]");
 
-        // 5. Update Order Status by Staff
-        System.out.println("\n--- Staff Operations ---");
+        // 5. Canteen Kitchen Prepares Food
+        System.out.println("\n--- 🍳 Kitchen Operations ---");
         canteenService.updateOrderStatus(order.getOrderId(), "PREPARING");
-        System.out.println("Updated Order Status: " + order.getStatus());
+        System.out.println("Status: " + order.getStatus());
 
         canteenService.updateOrderStatus(order.getOrderId(), "READY_FOR_PICKUP");
-        System.out.println("Updated Order Status: " + order.getStatus());
+        System.out.println("Status: " + order.getStatus() + " (Waiting for Student OTP at Counter)");
+
+        // 6. OTP Verification at Canteen Counter
+        System.out.println("\n--- 🔒 Pickup Counter OTP Verification ---");
+        System.out.println("Student presents OTP to Counter Staff...");
+        
+        // Test Invalid OTP first
+        System.out.println("Attempting verification with Incorrect OTP '0000':");
+        canteenService.verifyPickupOtp(order.getOrderId(), "0000");
+
+        // Test Valid OTP
+        System.out.println("\nAttempting verification with Correct OTP '" + order.getPickupOtp() + "':");
+        boolean isSuccess = canteenService.verifyPickupOtp(order.getOrderId(), order.getPickupOtp());
+
+        if (isSuccess) {
+            System.out.println("\nFinal Order State: " + order);
+        }
 
         System.out.println("\n==================================================");
-        System.out.println("   Canteen System Application Running Cleanly!   ");
+        System.out.println("   OTP Verification System Executed Cleanly!   ");
         System.out.println("==================================================");
     }
 }
