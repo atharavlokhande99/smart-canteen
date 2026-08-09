@@ -35,6 +35,7 @@ public class WebServer {
         server.createContext("/api/menu", new MenuHandler());
         server.createContext("/api/slots", new SlotsHandler());
         server.createContext("/api/order", new OrderHandler());
+        server.createContext("/api/order/pay", new PayHandler());
         server.createContext("/api/verify-otp", new OtpVerifyHandler());
 
         server.setExecutor(null);
@@ -160,6 +161,29 @@ public class WebServer {
                     Map<String, String> err = Collections.singletonMap("error", e.getMessage());
                     sendJsonResponse(exchange, 400, gson.toJson(err));
                 }
+            } else {
+                exchange.sendResponseHeaders(405, -1);
+            }
+        }
+    }
+
+    // API: Process Payment
+    private class PayHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+                InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+                Map<String, String> body = gson.fromJson(reader, Map.class);
+
+                String orderId = body.get("orderId");
+                String method = body.get("method");
+
+                boolean success = canteenService.processPayment(orderId, method);
+                Map<String, Object> resp = new HashMap<>();
+                resp.put("success", success);
+                resp.put("message", success ? "Payment Successful! Order Confirmed." : "Payment Failed!");
+
+                sendJsonResponse(exchange, success ? 200 : 400, gson.toJson(resp));
             } else {
                 exchange.sendResponseHeaders(405, -1);
             }

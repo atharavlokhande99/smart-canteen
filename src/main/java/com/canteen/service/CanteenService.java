@@ -20,11 +20,9 @@ public class CanteenService {
     }
 
     private void initSampleData() {
-        // Default Student User
         User student = new User("U101", "Atharav Lokhande", "atharavlokhande99@gmail.com", "STUDENT");
         registerUser(student, "password123");
 
-        // Default Staff User
         User staff = new User("S101", "Canteen Staff", "staff@canteen.com", "STAFF");
         registerUser(staff, "staff123");
 
@@ -154,6 +152,17 @@ public class CanteenService {
         orders.put(orderId, newOrder);
 
         return newOrder;
+    }
+
+    public boolean processPayment(String orderId, String paymentMethod) {
+        Order order = orders.get(orderId);
+        if (order != null) {
+            order.setPaymentStatus("PAID");
+            order.setPaymentMethod(paymentMethod != null ? paymentMethod : "UPI");
+            order.setStatus("PREPARING");
+            return true;
+        }
+        return false;
     }
 
     public Order updateOrderStatus(String orderId, String newStatus) {
