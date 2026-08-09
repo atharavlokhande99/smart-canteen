@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Canteen - Food Pre-Ordering & OTP Pickup</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40 px-6 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Smart Canteen Web Portal</h1>
+                    <p class="text-xs text-slate-400">Pre-Order Food & OTP Pickup System (Java Backend)</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700">
+                <i class="fa-solid fa-user-graduate text-indigo-400"></i>
+                <span class="text-sm font-medium">Atharav Lokhande</span>
+                <span class="text-xs bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/30">STUDENT</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Left Column: Menu Items -->
+        <section class="lg:col-span-2 space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-burger text-amber-400"></i> Today's Canteen Menu
+                </h2>
+                <p class="text-sm text-slate-400">Select items to add to your pre-order cart</p>
+            </div>
+
+            <!-- Menu Cards Grid -->
+            <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+        <!-- Right Column: Cart & Slot Checkout -->
+        <section class="space-y-6">
+            
+            <!-- Cart Box -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+                <h3 class="text-lg font-bold text-white flex items-center justify-between border-b border-slate-800 pb-3">
+                    <span><i class="fa-solid fa-cart-shopping text-indigo-400 mr-2"></i> Your Order Cart</span>
+                    <span id="cart-count" class="bg-indigo-600 text-white text-xs px-2.5 py-0.5 rounded-full">0 items</span>
+                </h3>
+
+                <!-- Cart Items List -->
+                <div id="cart-items" class="space-y-3 max-h-56 overflow-y-auto pr-1">
+                    <p class="text-sm text-slate-500 text-center py-6">Your cart is empty. Click "+ Add" on menu items above!</p>
+                </div>
+
+                <!-- Pickup Time Slot Picker -->
+                <div class="border-t border-slate-800 pt-4 space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider block">
+                        <i class="fa-regular fa-clock text-cyan-400 mr-1"></i> Select Pickup Time Slot
+                    </label>
+                    <div id="slots-container" class="grid grid-cols-1 gap-2">
+                        <!-- Dynamically populated slots -->
+                    </div>
+                </div>
+
+                <!-- Price Total -->
+                <div class="border-t border-slate-800 pt-4 flex justify-between items-center">
+                    <span class="text-slate-400">Total Amount:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-emerald-400">₹0.00</span>
+                </div>
+
+                <!-- Checkout Button -->
+                <button id="checkout-btn" onclick="placeOrder()" disabled class="w-full bg-slate-800 text-slate-500 cursor-not-allowed font-semibold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bolt"></i> Place Pre-Order & Get Pickup OTP
+                </button>
+            </div>
+
+            <!-- Staff OTP Verification Simulation Panel -->
+            <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+                <h3 class="text-md font-bold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i> Canteen Staff Counter Verification
+                </h3>
+                <p class="text-xs text-slate-400">Staff enters student's Pickup OTP at the counter to deliver food.</p>
+                
+                <div class="space-y-3">
+                    <input type="text" id="verify-order-id" placeholder="Order ID (e.g. ORD-1234)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <input type="text" id="verify-otp-input" maxlength="4" placeholder="Enter 4-Digit OTP" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 font-mono tracking-widest text-center text-lg">
+                    <button onclick="verifyOtpStaff()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl transition duration-200">
+                        <i class="fa-solid fa-check-double mr-1"></i> Verify OTP & Hand Over Food
+                    </button>
+                </div>
+                <div id="verify-result" class="hidden text-sm p-3 rounded-xl"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Modal Receipt & OTP Display -->
+    <div id="otp-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-6 text-center transform transition-all scale-95 animate-in">
+            <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            
+            <div>
+                <h3 class="text-xl font-bold text-white">Order Placed Successfully!</h3>
+                <p class="text-xs text-slate-400 mt-1">Show this OTP at the canteen pickup counter</p>
+            </div>
+
+            <!-- OTP Box -->
+            <div class="bg-slate-950 border-2 border-dashed border-emerald-500/50 rounded-2xl p-4 space-y-1">
+                <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">YOUR PICKUP OTP</span>
+                <div id="modal-otp" class="text-4xl font-extrabold font-mono text-emerald-400 tracking-widest py-1">----</div>
+                <span id="modal-order-id" class="text-xs text-slate-500 font-mono block">Order ID: ---</span>
+            </div>
+
+            <div class="text-left text-xs text-slate-400 space-y-1 bg-slate-800/40 p-3.5 rounded-xl border border-slate-800">
+                <div class="flex justify-between"><span>Pickup Time Slot:</span> <span id="modal-slot-time" class="font-semibold text-slate-200">--</span></div>
+                <div class="flex justify-between"><span>Total Paid:</span> <span id="modal-total" class="font-semibold text-emerald-400">₹0.00</span></div>
+            </div>
+
+            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition duration-200">
+                Done / Back to Menu
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let menuData = [];
+        let slotsData = [];
+        let cart = {}; // itemId -> quantity
+        let selectedSlotId = null;
+
+        // Fetch Menu & Slots from Java Backend API
+        async function loadApp() {
+            try {
+                const [menuRes, slotsRes] = await Promise.all([
+                    fetch('/api/menu'),
+                    fetch('/api/slots')
+                ]);
+                menuData = await menuRes.json();
+                slotsData = await slotsRes.json();
+                renderMenu();
+                renderSlots();
+            } catch (err) {
+                console.error("Failed to load backend API:", err);
+            }
+        }
+
+        function renderMenu() {
+            const container = document.getElementById('menu-grid');
+            container.innerHTML = menuData.map(item => `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition duration-200 flex flex-col justify-between space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">${item.category}</span>
+                            <h3 class="text-base font-bold text-white mt-1.5">${item.name}</h3>
+                        </div>
+                        <span class="text-lg font-extrabold text-emerald-400">₹${item.price.toFixed(2)}</span>
+                    </div>
+                    <button onclick="addToCart('${item.itemId}')" class="w-full bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white font-medium py-2 rounded-xl border border-indigo-500/30 transition duration-200 flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-plus text-xs"></i> Add to Cart
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderSlots() {
+            const container = document.getElementById('slots-container');
+            container.innerHTML = slotsData.map(slot => `
+                <button onclick="selectSlot('${slot.slotId}')" id="slot-btn-${slot.slotId}" class="slot-option border border-slate-800 bg-slate-950 hover:border-indigo-500 p-3 rounded-xl text-left transition duration-200 flex justify-between items-center">
+                    <div>
+                        <span class="text-sm font-semibold text-slate-200">${slot.startTime} - ${slot.endTime}</span>
+                    </div>
+                    <span class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded-lg">Cap: ${slot.currentBookings}/${slot.maxCapacity}</span>
+                </button>
+            `).join('');
+        }
+
+        function addToCart(itemId) {
+            cart[itemId] = (cart[itemId] || 0) + 1;
+            updateCartUI();
+        }
+
+        function removeFromCart(itemId) {
+            if (cart[itemId]) {
+                cart[itemId]--;
+                if (cart[itemId] <= 0) delete cart[itemId];
+            }
+            updateCartUI();
+        }
+
+        function selectSlot(slotId) {
+            selectedSlotId = slotId;
+            document.querySelectorAll('.slot-option').forEach(btn => {
+                btn.classList.remove('border-indigo-500', 'bg-indigo-500/10');
+            });
+            const selected = document.getElementById(`slot-btn-${slotId}`);
+            if (selected) {
+                selected.classList.add('border-indigo-500', 'bg-indigo-500/10');
+            }
+            updateCheckoutState();
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const itemKeys = Object.keys(cart);
+            let total = 0;
+            let totalCount = 0;
+
+            if (itemKeys.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-sm text-slate-500 text-center py-6">Your cart is empty.</p>';
+            } else {
+                cartItemsContainer.innerHTML = itemKeys.map(id => {
+                    const item = menuData.find(m => m.itemId === id);
+                    if (!item) return '';
+                    const subtotal = item.price * cart[id];
+                    total += subtotal;
+                    totalCount += cart[id];
+                    return `
+                        <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+                            <div>
+                                <span class="text-sm font-medium text-slate-200 block">${item.name}</span>
+                                <span class="text-xs text-slate-500">₹${item.price} × ${cart[id]}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="removeFromCart('${id}')" class="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 text-xs">-</button>
+                                <span class="text-sm font-semibold">${cart[id]}</span>
+                                <button onclick="addToCart('${id}')" class="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 text-xs">+</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('cart-count').innerText = `${totalCount} items`;
+            document.getElementById('cart-total').innerText = `₹${total.toFixed(2)}`;
+            updateCheckoutState();
+        }
+
+        function updateCheckoutState() {
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const hasItems = Object.keys(cart).length > 0;
+            if (hasItems && selectedSlotId) {
+                checkoutBtn.disabled = false;
+                checkoutBtn.className = "w-full bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer";
+            } else {
+                checkoutBtn.disabled = true;
+                checkoutBtn.className = "w-full bg-slate-800 text-slate-500 cursor-not-allowed font-semibold py-3.5 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2";
+            }
+        }
+
+        async function placeOrder() {
+            const itemIds = [];
+            for (let id in cart) {
+                for (let i = 0; i < cart[id]; i++) itemIds.push(id);
+            }
+
+            const payload = {
+                userId: "U101",
+                items: itemIds,
+                slotId: selectedSlotId
+            };
+
+            try {
+                const res = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const order = await res.json();
+                
+                if (order.error) {
+                    alert("Error: " + order.error);
+                    return;
+                }
+
+                // Display Modal with OTP
+                document.getElementById('modal-otp').innerText = order.pickupOtp;
+                document.getElementById('modal-order-id').innerText = `Order ID: ${order.orderId}`;
+                document.getElementById('modal-total').innerText = `₹${order.totalAmount.toFixed(2)}`;
+                
+                const slot = slotsData.find(s => s.slotId === order.slotId);
+                document.getElementById('modal-slot-time').innerText = slot ? `${slot.startTime} - ${slot.endTime}` : order.slotId;
+
+                // Pre-fill staff verification for demo testing
+                document.getElementById('verify-order-id').value = order.orderId;
+                document.getElementById('verify-otp-input').value = order.pickupOtp;
+
+                document.getElementById('otp-modal').classList.remove('hidden');
+                document.getElementById('otp-modal').classList.add('flex');
+
+                // Reset Cart
+                cart = {};
+                updateCartUI();
+            } catch (err) {
+                alert("Failed to place order: " + err);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('otp-modal').classList.add('hidden');
+            document.getElementById('otp-modal').classList.remove('flex');
+        }
+
+        async function verifyOtpStaff() {
+            const orderId = document.getElementById('verify-order-id').value;
+            const otp = document.getElementById('verify-otp-input').value;
+            const resultBox = document.getElementById('verify-result');
+
+            try {
+                const res = await fetch('/api/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId, otp })
+                });
+                const data = await res.json();
+
+                resultBox.classList.remove('hidden', 'bg-emerald-500/20', 'text-emerald-300', 'border-emerald-500/30', 'bg-rose-500/20', 'text-rose-300', 'border-rose-500/30');
+                if (data.success) {
+                    resultBox.className = "text-sm p-3 rounded-xl border bg-emerald-500/20 text-emerald-300 border-emerald-500/30 flex items-center gap-2";
+                    resultBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${data.message}`;
+                } else {
+                    resultBox.className = "text-sm p-3 rounded-xl border bg-rose-500/20 text-rose-300 border-rose-500/30 flex items-center gap-2";
+                    resultBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> ${data.message}`;
+                }
+            } catch (err) {
+                alert("Verification error: " + err);
+            }
+        }
+
+        window.onload = loadApp;
+    </script>
+</body>
+</html>

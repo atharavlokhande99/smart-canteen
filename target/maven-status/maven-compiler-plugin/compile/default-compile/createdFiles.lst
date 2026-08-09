@@ -1,0 +1,12 @@
+com\canteen\App.class
+com\canteen\server\WebServer.class
+com\canteen\model\Order.class
+com\canteen\model\TimeSlot.class
+com\canteen\server\WebServer$SlotsHandler.class
+com\canteen\server\WebServer$StaticFileHandler.class
+com\canteen\server\WebServer$OtpVerifyHandler.class
+com\canteen\server\WebServer$OrderHandler.class
+com\canteen\server\WebServer$MenuHandler.class
+com\canteen\model\MenuItem.class
+com\canteen\model\User.class
+com\canteen\service\CanteenService.class
