@@ -6,13 +6,15 @@ public class MenuItem {
     private String category;
     private double price;
     private boolean isAvailable;
+    private String imageUrl;
 
-    public MenuItem(String itemId, String name, String category, double price, boolean isAvailable) {
+    public MenuItem(String itemId, String name, String category, double price, boolean isAvailable, String imageUrl) {
         this.itemId = itemId;
         this.name = name;
         this.category = category;
         this.price = price;
         this.isAvailable = isAvailable;
+        this.imageUrl = imageUrl;
     }
 
     public String getItemId() { return itemId; }
@@ -29,6 +31,9 @@ public class MenuItem {
 
     public boolean isAvailable() { return isAvailable; }
     public void setAvailable(boolean available) { isAvailable = available; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     @Override
     public String toString() {
