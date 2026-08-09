@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Canteen - Food Pre-Ordering & OTP Pickup</title>
+    <title>Smart Canteen - Campus Food Pre-Ordering & OTP Pickup</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Smart Canteen Web Portal</h1>
-                    <p class="text-xs text-slate-400">Pre-Order Food & OTP Pickup System (Java Backend)</p>
+                    <p class="text-xs text-slate-400">Campus Pre-Ordering & OTP Pickup System (Java Backend)</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700">
@@ -38,13 +38,25 @@
     <!-- Main Container -->
     <main class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        <!-- Left Column: Menu Items -->
+        <!-- Left Column: Menu & Category Tabs -->
         <section class="lg:col-span-2 space-y-6">
-            <div>
-                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-burger text-amber-400"></i> Today's Canteen Menu
-                </h2>
-                <p class="text-sm text-slate-400">Select items to add to your pre-order cart</p>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-burger text-amber-400"></i> Today's Canteen Menu
+                    </h2>
+                    <p class="text-sm text-slate-400">43 Freshly Prepared Items • Select items to add to cart</p>
+                </div>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="flex overflow-x-auto pb-2 gap-2 scrollbar-none border-b border-slate-800">
+                <button onclick="filterCategory('All')" id="cat-btn-All" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-indigo-600 text-white transition">All Items</button>
+                <button onclick="filterCategory('Breakfast')" id="cat-btn-Breakfast" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800 transition">🍳 Breakfast</button>
+                <button onclick="filterCategory('Snacks')" id="cat-btn-Snacks" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800 transition">🍔 Snacks</button>
+                <button onclick="filterCategory('College Favorites')" id="cat-btn-College Favorites" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800 transition">🍕 Favorites</button>
+                <button onclick="filterCategory('Proper Lunch')" id="cat-btn-Proper Lunch" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800 transition">🍛 Lunch</button>
+                <button onclick="filterCategory('Drinks')" id="cat-btn-Drinks" class="cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800 transition">🥤 Drinks</button>
             </div>
 
             <!-- Menu Cards Grid -->
@@ -65,7 +77,7 @@
 
                 <!-- Cart Items List -->
                 <div id="cart-items" class="space-y-3 max-h-56 overflow-y-auto pr-1">
-                    <p class="text-sm text-slate-500 text-center py-6">Your cart is empty. Click "+ Add" on menu items above!</p>
+                    <p class="text-sm text-slate-500 text-center py-6">Your cart is empty. Click "+ Add" on menu items!</p>
                 </div>
 
                 <!-- Pickup Time Slot Picker -->
@@ -145,10 +157,10 @@
     <script>
         let menuData = [];
         let slotsData = [];
+        let activeCategory = 'All';
         let cart = {}; // itemId -> quantity
         let selectedSlotId = null;
 
-        // Fetch Menu & Slots from Java Backend API
         async function loadApp() {
             try {
                 const [menuRes, slotsRes] = await Promise.all([
@@ -164,13 +176,29 @@
             }
         }
 
+        function filterCategory(category) {
+            activeCategory = category;
+            document.querySelectorAll('.cat-tab').forEach(btn => {
+                btn.className = "cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-900 text-slate-400 hover:bg-slate-800 border border-slate-800 transition";
+            });
+            const activeBtn = document.getElementById(`cat-btn-${category}`);
+            if (activeBtn) {
+                activeBtn.className = "cat-tab px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-indigo-600 text-white transition";
+            }
+            renderMenu();
+        }
+
         function renderMenu() {
             const container = document.getElementById('menu-grid');
-            container.innerHTML = menuData.map(item => `
+            const filtered = activeCategory === 'All' 
+                ? menuData 
+                : menuData.filter(item => item.category === activeCategory);
+
+            container.innerHTML = filtered.map(item => `
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition duration-200 flex flex-col justify-between space-y-4">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">${item.category}</span>
+                            <span class="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">${item.category}</span>
                             <h3 class="text-base font-bold text-white mt-1.5">${item.name}</h3>
                         </div>
                         <span class="text-lg font-extrabold text-emerald-400">₹${item.price.toFixed(2)}</span>
@@ -292,7 +320,6 @@
                     return;
                 }
 
-                // Display Modal with OTP
                 document.getElementById('modal-otp').innerText = order.pickupOtp;
                 document.getElementById('modal-order-id').innerText = `Order ID: ${order.orderId}`;
                 document.getElementById('modal-total').innerText = `₹${order.totalAmount.toFixed(2)}`;
@@ -300,14 +327,12 @@
                 const slot = slotsData.find(s => s.slotId === order.slotId);
                 document.getElementById('modal-slot-time').innerText = slot ? `${slot.startTime} - ${slot.endTime}` : order.slotId;
 
-                // Pre-fill staff verification for demo testing
                 document.getElementById('verify-order-id').value = order.orderId;
                 document.getElementById('verify-otp-input').value = order.pickupOtp;
 
                 document.getElementById('otp-modal').classList.remove('hidden');
                 document.getElementById('otp-modal').classList.add('flex');
 
-                // Reset Cart
                 cart = {};
                 updateCartUI();
             } catch (err) {
