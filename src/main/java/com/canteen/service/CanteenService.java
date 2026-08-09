@@ -173,22 +173,40 @@ public class CanteenService {
         return order;
     }
 
-    public boolean verifyPickupOtp(String orderId, String inputOtp) {
+    public Map<String, Object> verifyPickupOtpDetails(String orderId, String inputOtp) {
         Order order = orders.get(orderId);
+        Map<String, Object> resp = new HashMap<>();
+
         if (order == null) {
-            System.out.println("❌ Order Error: Order ID " + orderId + " not found!");
-            return false;
+            resp.put("success", false);
+            resp.put("message", "Order ID " + orderId + " not found!");
+            return resp;
         }
 
         if (order.getPickupOtp().equals(inputOtp)) {
             order.setOtpVerified(true);
             order.setStatus("COMPLETED");
-            System.out.println("✅ OTP Verified Successfully! Food Order Handed Over to Student.");
-            return true;
+
+            Set<String> itemNamesSet = new LinkedHashSet<>();
+            for (MenuItem item : order.getItems()) {
+                itemNamesSet.add(item.getName());
+            }
+            String foodSummary = String.join(", ", itemNamesSet);
+
+            resp.put("success", true);
+            resp.put("foodNames", foodSummary);
+            resp.put("message", "Thank You! OTP Verified Successfully 🎉 Please collect your fresh " + foodSummary + " at the counter and enjoy your " + foodSummary + "! 🍽️");
+            return resp;
         } else {
-            System.out.println("❌ OTP Verification Failed! Invalid OTP provided for Order " + orderId);
-            return false;
+            resp.put("success", false);
+            resp.put("message", "INVALID OTP PROVIDED! You entered a wrong OTP. Please check your order receipt and enter the correct 4-digit OTP.");
+            return resp;
         }
+    }
+
+    public boolean verifyPickupOtp(String orderId, String inputOtp) {
+        Map<String, Object> result = verifyPickupOtpDetails(orderId, inputOtp);
+        return (Boolean) result.get("success");
     }
 
     public List<Order> getUserOrders(String userId) {

@@ -190,7 +190,7 @@ public class WebServer {
         }
     }
 
-    // API: Verify Pickup OTP
+    // API: Verify Pickup OTP with Detailed Food Item Names
     private class OtpVerifyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -201,12 +201,10 @@ public class WebServer {
                 String orderId = body.get("orderId");
                 String otp = body.get("otp");
 
-                boolean success = canteenService.verifyPickupOtp(orderId, otp);
-                Map<String, Object> resp = new HashMap<>();
-                resp.put("success", success);
-                resp.put("message", success ? "OTP Verified! Order Handed Over." : "Invalid OTP!");
+                Map<String, Object> result = canteenService.verifyPickupOtpDetails(orderId, otp);
+                boolean success = (Boolean) result.get("success");
 
-                sendJsonResponse(exchange, success ? 200 : 400, gson.toJson(resp));
+                sendJsonResponse(exchange, success ? 200 : 400, gson.toJson(result));
             } else {
                 exchange.sendResponseHeaders(405, -1);
             }

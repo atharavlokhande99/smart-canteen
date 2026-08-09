@@ -360,7 +360,6 @@
                     <div class="flex justify-between"><span>Payment Method:</span> <span id="modal-pay-method" class="font-semibold text-indigo-300">UPI</span></div>
                 </div>
 
-                <!-- BUTTON TAKE USER BACK TO 2-CHOICE DECISION SCREEN -->
                 <button onclick="closeModalAndGoHome()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-xl transition duration-200 shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-house"></i> Done / Back to Choice Screen
                 </button>
@@ -722,13 +721,13 @@
             }
         }
 
-        // CLOSE RECEIPT MODAL AND RETURN USER DIRECTLY TO 2-CHOICE DECISION SCREEN
         function closeModalAndGoHome() {
             document.getElementById('otp-modal').classList.add('hidden');
             document.getElementById('otp-modal').classList.remove('flex');
-            showChoiceScreen(); // Returns user to the "Want Food" vs "Came for Pick Up" decision screen!
+            showChoiceScreen();
         }
 
+        // VERIFY OTP AT CANTEEN COUNTER WITH PERSONALIZED FOOD ITEM ENJOYMENT REMARK
         async function verifyOtpStaff() {
             const orderId = document.getElementById('verify-order-id').value;
             const otp = document.getElementById('verify-otp-input').value;
@@ -750,6 +749,8 @@
                 resultBox.classList.remove('hidden');
                 
                 if (data.success) {
+                    // PERSONALIZED ITEM ENJOYMENT MESSAGE (e.g. Upma, Veg Thali)
+                    const foodNameText = data.foodNames || "food";
                     resultBox.className = "p-6 rounded-2xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-center space-y-3 animate-in zoom-in duration-200";
                     resultBox.innerHTML = `
                         <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl">
@@ -757,10 +758,11 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-emerald-400">Thank You! OTP Verified Successfully 🎉</h3>
-                            <p class="text-sm text-slate-200 mt-1 font-medium">Your food is ready! Please collect your meal at the counter and enjoy your food! 🍽️</p>
+                            <p class="text-base text-slate-200 mt-2 font-bold">Please collect your fresh <span class="text-amber-300 underline font-extrabold">${foodNameText}</span> at the counter and enjoy your delicious <span class="text-amber-300 font-extrabold">${foodNameText}</span>! 🍽️✨</p>
                         </div>
                     `;
                 } else {
+                    // WRONG OTP RED REMARK
                     resultBox.className = "p-6 rounded-2xl border bg-rose-500/10 border-rose-500/30 text-rose-300 text-center space-y-3 animate-in shake duration-200";
                     resultBox.innerHTML = `
                         <div class="w-14 h-14 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mx-auto text-3xl">
